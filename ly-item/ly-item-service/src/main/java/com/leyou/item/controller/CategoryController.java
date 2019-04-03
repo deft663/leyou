@@ -64,4 +64,36 @@ public class CategoryController {
         // 响应500
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+    @RequestMapping(value = "del",method = RequestMethod.DELETE)
+    public ResponseEntity delCategory(Long pid) {
+        try {
+            if (pid==0){
+                // pid为null或者小于等于0，响应400
+                return ResponseEntity.badRequest().build();
+            }
+            categoryService.deleteCategory(pid);
+            // 响应200
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 响应500
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+    @RequestMapping(value = "modify",method = RequestMethod.PUT)
+    public ResponseEntity modifyCategory(@RequestBody Category category) {
+        try {
+            if (category.getId()==0){
+                // pid为null或者小于等于0，响应400
+                return ResponseEntity.badRequest().build();
+            }
+            categoryService.modify(category);
+            // 响应200
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 响应500
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
 }

@@ -27,4 +27,12 @@ public class CategoryService {
     public void addCategory(Category category){
         categoryMapper.insert(category);
     }
+    public void deleteCategory(Long id){
+        Category category=new Category();
+        category.setId(id);
+        categoryMapper.delete(category);
+    }
+    public void modify(Category category){
+        categoryMapper.updateByPrimaryKey(category);
+    }
 }
