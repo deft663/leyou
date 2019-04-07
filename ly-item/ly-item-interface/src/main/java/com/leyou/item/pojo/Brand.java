@@ -45,4 +45,14 @@ public class Brand {
     public void setLetter(Character letter) {
         this.letter = letter;
     }
+
+    @Override
+    public String toString() {
+        return "Brand{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", image='" + image + '\'' +
+                ", letter=" + letter +
+                '}';
+    }
 }

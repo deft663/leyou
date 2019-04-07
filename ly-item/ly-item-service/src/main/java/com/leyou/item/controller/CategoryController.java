@@ -8,10 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -90,6 +87,19 @@ public class CategoryController {
             categoryService.modify(category);
             // 响应200
             return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        // 响应500
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+    @RequestMapping(value = "/bid/{id}",method = RequestMethod.GET)
+    public ResponseEntity<List<Category>> findCategoryByBrandId(@PathVariable Long id) {
+        try {
+
+            List<Category> list=  categoryService.findCategoryByBrandId(id);
+            // 响应200
+            return ResponseEntity.ok(list);
         } catch (Exception e) {
             e.printStackTrace();
         }

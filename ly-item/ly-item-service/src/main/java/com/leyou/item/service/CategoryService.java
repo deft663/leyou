@@ -4,6 +4,7 @@ import com.leyou.item.mapper.CategoryMapper;
 import com.leyou.item.pojo.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -34,5 +35,10 @@ public class CategoryService {
     }
     public void modify(Category category){
         categoryMapper.updateByPrimaryKey(category);
+    }
+
+    public List<Category> findCategoryByBrandId(Long id) {
+
+        return categoryMapper.findCategoryByBrandId(id);
     }
 }

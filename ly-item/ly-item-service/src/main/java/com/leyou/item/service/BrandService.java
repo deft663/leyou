@@ -8,8 +8,13 @@ import com.leyou.item.pojo.Brand;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Transactional
 @Service
 public class BrandService {
 
@@ -35,5 +40,48 @@ public class BrandService {
         Page<Brand> pageInfo = (Page<Brand>) brandMapper.selectByExample(example);
         // 返回结果
         return new PageResult<>(pageInfo.getTotal(), pageInfo);
+    }
+
+    public List<Brand> queryBrandByName(String name) {
+        Example example = new Example(Brand.class);
+        example.and().andEqualTo("name",name);
+        List<Brand> brands = brandMapper.selectByExample(example);
+        return brands;
+    }
+
+    public void   add(Brand brand, List<Long> cids) {
+        int i = brandMapper.insertSelective(brand);
+        for (Long cid : cids) {
+            brandMapper.insertCategoryBrand(cid, brand.getId());
+        }
+    }
+
+    public Brand findBrandById(Long id) {
+        Brand brand=new Brand();
+        brand.setId(id);
+        return  brandMapper.selectOne(brand);
+    }
+
+    /**
+     * 修改品牌时先删除中间表的关联，重新添加
+     * 图片问题
+     * @param brand
+     * @param cids
+     * @return
+     */
+    public void editBrand(Brand brand, List<Long> cids) {
+        brandMapper.updateByPrimaryKey(brand);
+        brandMapper.deleteCategoryBrandByBrandId(brand.getId());
+        for (Long cid : cids) {
+            brandMapper.insertCategoryBrand(cid,brand.getId());
+        }
+    }
+
+    public void delBrandById(Long id) {
+        Brand brand=new Brand();
+        brand.setId(id);
+        brandMapper.deleteCategoryBrandByBrandId(id);
+        brandMapper.delete(brand);
+
     }
 }
