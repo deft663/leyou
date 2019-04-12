@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryService {
@@ -40,5 +41,9 @@ public class CategoryService {
     public List<Category> findCategoryByBrandId(Long id) {
 
         return categoryMapper.findCategoryByBrandId(id);
+    }
+
+    public List<String> queryNameByIds(List<Long> longs) {
+        return this.categoryMapper.selectByIdList(longs).stream().map(Category::getName).collect(Collectors.toList());
     }
 }

@@ -10,9 +10,9 @@
 		<module>lyregistry</module>
 		<module>ly-api-gateway</module>
 		<module>ly-item</module>
-        <module>leyou-common</module>
-        <module>lyupload</module>
-    </modules>
+		<module>leyou-common</module>
+		<module>lyupload</module>
+	</modules>
 	<packaging>pom</packaging>
 
 	<name>leyou</name>

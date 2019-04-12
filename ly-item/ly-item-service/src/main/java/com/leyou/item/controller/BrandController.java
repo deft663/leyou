@@ -25,7 +25,7 @@ public class BrandController {
             @RequestParam(value = "sortBy", required = false) String sortBy,
             @RequestParam(value = "desc", defaultValue = "false") Boolean desc,
             @RequestParam(value = "key", required = false) String key) {
-        PageResult<Brand> result = this.brandService.queryBrandByPageAndSort(page,rows,sortBy,desc, key);
+         PageResult<Brand> result = this.brandService.queryBrandByPageAndSort(page,rows,sortBy,desc, key);
         if (result == null || result.getItems().size() == 0){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -50,7 +50,12 @@ public class BrandController {
     public ResponseEntity<Brand> getBrandById(@PathVariable Long id){
         Brand brand = brandService.findBrandById(id);
         return new ResponseEntity<Brand>(brand,HttpStatus.OK);
+    }@GetMapping("/cid/{id}")
+    public ResponseEntity<List<Brand>> getBrandByCategoryId(@PathVariable Long id){
+         List<Brand> list = brandService.findBrandByCategoryId(id);
+        return new ResponseEntity<List<Brand>>(list,HttpStatus.OK);
     }
+
     @PutMapping
     public ResponseEntity editBrand(
             @RequestParam("cids") List<Long> cids,

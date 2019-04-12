@@ -11,8 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.springframework.util.Assert.notNull;
 
 @Transactional
 @Service
@@ -83,5 +86,9 @@ public class BrandService {
         brandMapper.deleteCategoryBrandByBrandId(id);
         brandMapper.delete(brand);
 
+    }
+
+    public List<Brand> findBrandByCategoryId(Long id) {
+        return brandMapper.findBrandByCategoryId(id);
     }
 }
