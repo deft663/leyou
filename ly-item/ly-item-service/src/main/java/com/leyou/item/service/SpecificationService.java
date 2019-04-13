@@ -18,19 +18,22 @@ public class SpecificationService {
     private SpecGroupMapper specGroupMapper;
     @Autowired
     private SpecParamMapper specParamMapper;
+
     public List<SpecGroup> queryByCategoryId(Long cid) {
-        SpecGroup specGroup=new SpecGroup();
+        SpecGroup specGroup = new SpecGroup();
         specGroup.setCategoryId(cid);
         return specGroupMapper.select(specGroup);
     }
+
     public void addGroup(SpecGroup group) {
         System.out.println(group);
         specGroupMapper.insert(group);
     }
 
-    public List<SpecParam> querySpecParamsByGroupId(Long gid) {
+    public List<SpecParam> querySpecParamsByGroupId(Long gid, Long cid) {
         SpecParam specParam = new SpecParam();
         specParam.setGroupId(gid);
+        specParam.setCategoryId(cid);
         return specParamMapper.select(specParam);
     }
 
@@ -38,9 +41,10 @@ public class SpecificationService {
         System.out.println(param);
         specParamMapper.insert(param);
     }
+
     public void delSpecParams(Long id) {
         System.out.println(id);
-        SpecParam specParam=new SpecParam();
+        SpecParam specParam = new SpecParam();
         specParam.setId(id);
         specParamMapper.delete(specParam);
     }

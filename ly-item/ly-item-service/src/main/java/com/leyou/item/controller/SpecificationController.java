@@ -33,8 +33,8 @@ public class SpecificationController {
     }
 
     @GetMapping("/params")
-    public ResponseEntity<List<SpecParam> > querySpecnParamsByGroupId(@RequestParam(name = "gid") Long id){
-        List<SpecParam> specParams = this.specificationService.querySpecParamsByGroupId(id);
+    public ResponseEntity<List<SpecParam> > querySpecnParamsByGroupId(@RequestParam(name = "gid",required = false) Long  gid,@RequestParam(name = "cid",required = false) Long cid){
+        List<SpecParam> specParams = this.specificationService.querySpecParamsByGroupId(gid,cid);
         if (specParams == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

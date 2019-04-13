@@ -23,6 +23,6 @@ public interface BrandMapper extends Mapper<Brand> {
     @Delete("delete from tb_category_brand where brand_id=#{id}")
     void deleteCategoryBrandByBrandId(Long id);
 
-    @Select("select b.* from tb_brand b,tb_category c,tb_category_brand cb where b.id=cb.brand_id and c.id=cb.category_id and c.id=#{id}")
-    List<Brand> findBrandByCategoryId(Long id);
+    @Select("select b.* from tb_brand b,tb_category_brand cb where b.id=cb.brand_id and cb.category_id=#{id}")
+    List<Brand> findBrandByCategoryId(@Param("id") Long id);
 }

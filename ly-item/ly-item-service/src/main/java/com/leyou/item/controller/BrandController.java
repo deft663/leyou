@@ -50,7 +50,8 @@ public class BrandController {
     public ResponseEntity<Brand> getBrandById(@PathVariable Long id){
         Brand brand = brandService.findBrandById(id);
         return new ResponseEntity<Brand>(brand,HttpStatus.OK);
-    }@GetMapping("/cid/{id}")
+    }
+    @GetMapping("/cid/{id}")
     public ResponseEntity<List<Brand>> getBrandByCategoryId(@PathVariable Long id){
          List<Brand> list = brandService.findBrandByCategoryId(id);
         return new ResponseEntity<List<Brand>>(list,HttpStatus.OK);
