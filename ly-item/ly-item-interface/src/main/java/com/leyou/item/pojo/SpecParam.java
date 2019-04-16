@@ -5,7 +5,7 @@ import javax.persistence.*;
 /**
  * 注解地址--> https://github.com/abel533/Mapper/wiki/2.2-mapping
  */
-@Table(name="tb_params_key")
+@Table(name="tb_params")
 public class SpecParam {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
