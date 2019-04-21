@@ -33,8 +33,11 @@ public class SpecificationController {
     }
 
     @GetMapping("/params")
-    public ResponseEntity<List<SpecParam> > querySpecnParamsByGroupId(@RequestParam(name = "gid",required = false) Long  gid,@RequestParam(name = "cid",required = false) Long cid){
-        List<SpecParam> specParams = this.specificationService.querySpecParamsByGroupId(gid,cid);
+    public ResponseEntity<List<SpecParam> > querySpecnParamsByGroupId(@RequestParam(name = "gid",required = false) Long  gid,
+                                                                      @RequestParam(name = "cid",required = false) Long cid,
+                                                                      @RequestParam(name = "searchable",required = false) Boolean searchable,
+                                                                      @RequestParam(name = "generic",required = false) Boolean generic){
+        List<SpecParam> specParams = this.specificationService.querySpecParamsByGroupId(gid,cid,searchable,generic);
         if (specParams == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -43,6 +46,11 @@ public class SpecificationController {
     @PostMapping("/params")
     public ResponseEntity addSpecnParams(@RequestBody SpecParam param){
         this.specificationService.addSpecParams(param);
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("/params")
+    public ResponseEntity updateSpecnParams(@RequestBody SpecParam param){
+        this.specificationService.updateSpecnParams(param);
         return ResponseEntity.ok().build();
     }
     @DeleteMapping("/param/{id}")

@@ -12,7 +12,9 @@
 		<module>ly-item</module>
 		<module>leyou-common</module>
 		<module>lyupload</module>
-	</modules>
+        <module>leyou-search</module>
+        <module>leyou-annotation</module>
+    </modules>
 	<packaging>pom</packaging>
 
 	<name>leyou</name>

@@ -247,7 +247,7 @@ Date.prototype.format = function (format) {
 var has = Object.prototype.hasOwnProperty;
 
 var defaults = {
-    allowDots: false,
+    allowDots: true,
     allowPrototypes: false,
     arrayLimit: 20,
     decoder: utils.decode,
@@ -428,7 +428,7 @@ const stringify = function(object, options) {
         formatter : utils.formatter,
         encodeValuesOnly: true
     }
-    Object.assign(option, options);
+        Object.assign(option, options);
     let {prefix, generateArrayPrefix, strictNullHandling, skipNulls, encoder, filter,
         sort, allowDots, serializeDate, formatter, encodeValuesOnly} = option;
 

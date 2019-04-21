@@ -156,7 +156,8 @@ ul.logo-list li {
 
 .sui-navbar .navbar-inner {
 	padding-left: 0;
-	border-radius: 0
+	border-radius: 0;
+	height: 40px;
 }
 
 .sui-navbar .sui-nav>.active>a {
@@ -179,7 +180,8 @@ ul.logo-list li {
 
 .goods-list .p-img {
 	width: 215px;
-	height: 255px
+	height: 255px;
+	overflow: hidden;
 }
 
 .p-img,

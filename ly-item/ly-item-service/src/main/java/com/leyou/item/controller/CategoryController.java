@@ -106,4 +106,16 @@ public class CategoryController {
         // 响应500
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
+    @GetMapping("getId")
+    public ResponseEntity<List<String>> getCategoryNameListByIdList(@RequestParam("ids")List<Long> ids){
+        return ResponseEntity.ok(this.categoryService.queryNameByIds(ids));
+    }
+    @GetMapping("get")
+    public ResponseEntity<List<Category>> getCategoryListByIdList(@RequestParam("ids")List<Long> ids){
+        return ResponseEntity.ok(this.categoryService.queryByIds(ids));
+    }
+    @GetMapping("getThree")
+    public ResponseEntity<List<Category>> getCategorybyCid3(@RequestParam(name = "cid3") Long cid3) {
+        return ResponseEntity.ok(this.categoryService.getCategorybyCid3(cid3));
+    }
 }

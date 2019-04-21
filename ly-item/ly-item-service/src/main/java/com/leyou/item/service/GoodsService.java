@@ -46,15 +46,16 @@ public class GoodsService {
         }
         example.setOrderByClause("last_update_time desc");
         Page<Spu> pageInfo = (Page<Spu>) this.spuMapper.selectByExample(example);
-        List<SpuBo> spuBos = pageInfo.getResult().stream().map(spu -> {
+        List<SpuBo> spuBos =new ArrayList<>();
+                pageInfo.getResult().forEach(spu -> {
             SpuBo spuBo = new SpuBo();
             BeanUtils.copyProperties(spu, spuBo);
             List<String> names = this.categoryService.queryNameByIds(Arrays.asList(spu.getCid1(), spu.getCid2(), spu.getCid3()));
             spuBo.setCname(StringUtils.join(names, "/"));
             Brand brand = this.brandMapper.selectByPrimaryKey(spu.getBrandId());
             spuBo.setBname(brand.getName());
-            return spuBo;
-        }).collect(Collectors.toList());
+                    spuBos.add(spuBo);
+        });
 
         return new PageResult<SpuBo>(pageInfo.getTotal(),spuBos);
     }

@@ -1,7 +1,9 @@
 package com.leyou.item.service;
 
+import com.leyou.item.mapper.BrandMapper;
 import com.leyou.item.mapper.SpecGroupMapper;
 import com.leyou.item.mapper.SpecParamMapper;
+import com.leyou.item.pojo.Brand;
 import com.leyou.item.pojo.SpecGroup;
 import com.leyou.item.pojo.SpecParam;
 import com.netflix.discovery.converters.Auto;
@@ -19,6 +21,8 @@ public class SpecificationService {
     @Autowired
     private SpecParamMapper specParamMapper;
 
+    @Autowired
+    private BrandMapper brandMapper;
     public List<SpecGroup> queryByCategoryId(Long cid) {
         SpecGroup specGroup = new SpecGroup();
         specGroup.setCategoryId(cid);
@@ -30,10 +34,12 @@ public class SpecificationService {
         specGroupMapper.insert(group);
     }
 
-    public List<SpecParam> querySpecParamsByGroupId(Long gid, Long cid) {
+    public List<SpecParam> querySpecParamsByGroupId(Long gid, Long cid,Boolean searchable,Boolean generic) {
         SpecParam specParam = new SpecParam();
         specParam.setGroupId(gid);
         specParam.setCategoryId(cid);
+        specParam.setSearching(searchable);
+        specParam.setGeneric(generic);
         return specParamMapper.select(specParam);
     }
 
@@ -47,5 +53,10 @@ public class SpecificationService {
         SpecParam specParam = new SpecParam();
         specParam.setId(id);
         specParamMapper.delete(specParam);
+    }
+
+
+    public void updateSpecnParams(SpecParam param) {
+        this.specParamMapper.updateByPrimaryKey(param);
     }
 }

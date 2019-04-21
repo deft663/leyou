@@ -1,5 +1,7 @@
 server:
   port: 8082
+  tomcat:
+    basedir: /tmp/tomcat #默认目录会在n天之后被系统自动清理掉，这个清理是由linux操作系统完成的 不配置的话到时候找不到目录会抛异常
 spring:
   application:
     name: upload-service
