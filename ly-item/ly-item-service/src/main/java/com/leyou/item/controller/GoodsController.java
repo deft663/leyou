@@ -1,6 +1,7 @@
 package com.leyou.item.controller;
 
 import com.leyou.common.pojo.PageResult;
+import com.leyou.item.dto.CartDto;
 import com.leyou.item.mapper.StockMapper;
 import com.leyou.item.pojo.*;
 import com.leyou.item.service.GoodsService;
@@ -66,5 +67,25 @@ public class GoodsController {
 
         return ResponseEntity.ok(skuList);
     }
-
+    @GetMapping("spu/{id}")
+    public ResponseEntity<Spu> querySpuById(@PathVariable("id") Long id){
+        Spu spu = this.goodsService.querySpuById(id);
+        if(spu == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(spu);
+    }
+    @GetMapping("sku/{id}")
+    public ResponseEntity<Sku> querySkuById(@PathVariable("id") Long id){
+        Sku sku = this.goodsService.querySkuById(id);
+        if(sku == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(sku);
+    }
+    @PostMapping("reduceStock")
+    public ResponseEntity reduceStock(@RequestBody List<CartDto> cartDtos){
+        this.goodsService.reduceStock(cartDtos);
+        return ResponseEntity.ok().build();
+    }
 }

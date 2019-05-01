@@ -199,7 +199,7 @@
                         <li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
                             <div class="list-wrap">
                                 <div class="p-img">
-                                    <a href="item.html" target="_blank"><img :src="goods.selected.image" height="215"
+                                    <a :href="'item/'+goods.id+'.html'" target="_blank"><img :src="goods.selected.image" height="215"
                                                                              width="215"/></a>
                                     <!--多sku图片列表-->
                                     <ul class="skus">

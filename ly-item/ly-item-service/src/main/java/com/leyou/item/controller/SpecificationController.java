@@ -58,4 +58,12 @@ public class SpecificationController {
         specificationService.delSpecParams(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+    @GetMapping("{cid}")
+    public ResponseEntity<List<SpecGroup>> querySpecsByCid(@PathVariable("cid") Long cid){
+        List<SpecGroup> list = this.specificationService.querySpecsByCid(cid);
+        if(list == null || list.size() == 0){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(list);
+    }
 }

@@ -36,9 +36,9 @@ const lyTop = {
                         <div class='fr shopcar'> \
                             <div class='show-shopcar' id='shopcar'> \
                                 <span class='car'></span> \
-                                <a class='sui-btn btn-default btn-xlarge' href='cart.html' target='_blank'> \
+                                <a class='sui-btn btn-default btn-xlarge' href='/cart.html' target='_blank'> \
                                     <span>我的购物车</span> \
-                                    <i class='shopnum'>0</i> \
+                                    <i class='shopnum'>{{carts.length}}</i> \
                                 </a> \
                                 <div class='clearfix shopcarlist' id='shopcarlist' style='display:none'> \
                                     <p>'啊哦，你的购物车还没有商品哦！'</p> \
@@ -74,12 +74,13 @@ const lyTop = {
     data() {
         return {
             key: "",
-            query: location.search
+            query: location.search,
+            carts:[]
         }
     },
     methods: {
         search() {
-            window.location = 'search.html?key=' + this.key;
+            window.location = '/search.html?key=' + this.key;
         },
         getUrlParam: function (name) {
             var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
@@ -91,6 +92,13 @@ const lyTop = {
         }
     },
     created() {
+        ly.http.get("/auth/verify").then(resp=>{
+            ly.http.get("/cart").then(resp=>{
+                this.carts=resp.data;
+            })
+        }).catch(()=>{
+            this.carts=ly.store.get("carts")||[];
+        })
         this.key = this.getUrlParam("key");
     },
     components: {

@@ -18,7 +18,13 @@ zuul:
   routes:
     item-service: /item/**
     search-service: /search/**
-  ignored-services: upload-service  # 忽略upload-service服务
+    user-service: /user/**
+    cart-service: /cart/**
+    order-service: /order/**
+    auth-service: /auth/** # 授权中心微服务
+  ignored-services: upload-service # 忽略upload-service服务
+  add-host-header: true #携带请求本身的请求头信息
+  sensitive-headers: #设为空 否则会过滤掉set-cookie响应头 cookie写不出去
 ribbon:
   ConnectTimeout: 250 # 连接超时时间(ms)
   ReadTimeout: 2000 # 通信超时时间(ms)
@@ -32,3 +38,15 @@ hystrix:
         isolation:
           thread:
             timeoutInMillisecond: 10000 # 熔断超时时长：10000ms
+leyou:
+  jwt:
+    pubKeyPath:  C:\\tmp\\rsa\\rsa.pub # 公钥地址
+    cookieName: LY_TOKEN # cookie的名称
+  filter:
+    allowPaths:
+      - /api/auth
+      - /api/search
+      - /api/user/register
+      - /api/user/check
+      - /api/user/code
+      - /api/item

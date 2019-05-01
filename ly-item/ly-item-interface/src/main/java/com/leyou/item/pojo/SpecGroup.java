@@ -1,9 +1,7 @@
 package com.leyou.item.pojo;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Table(name="tb_group")
 public class SpecGroup {
@@ -15,6 +13,8 @@ public class SpecGroup {
 
     private String name;
 
+    @Transient
+    private List<SpecParam> params; // 该组下的所有规格参数集合
     public Long getId() {
         return id;
     }
@@ -37,6 +37,14 @@ public class SpecGroup {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<SpecParam> getParams() {
+        return params;
+    }
+
+    public void setParams(List<SpecParam> params) {
+        this.params = params;
     }
 
     @Override

@@ -4,9 +4,13 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.util.StringUtil;
 import com.leyou.common.pojo.PageResult;
+import com.leyou.item.dto.CartDto;
 import com.leyou.item.mapper.*;
 import com.leyou.item.pojo.*;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,8 @@ import java.util.stream.Stream;
 @Service
 public class GoodsService {
     @Autowired
+    private AmqpTemplate amqpTemplate;
+    @Autowired
     private SpuMapper spuMapper;
     @Autowired
     private SpuDetailMapper spuDetailMapper;
@@ -30,7 +36,7 @@ public class GoodsService {
     private StockMapper stockMapper;
     @Autowired
     private CategoryService categoryService;
-
+    private Logger logger= LoggerFactory.getLogger(GoodsService.class);
     @Autowired
     private BrandMapper brandMapper;
     public PageResult<SpuBo> getGoodsPage(String key, Boolean saleable, Integer page, Integer rows) {
@@ -85,9 +91,11 @@ public class GoodsService {
             stockList.add(stock);
         }
         //添加stock库存
-        skuMapper.insertList(stockList);
+        stockMapper.insertList(stockList);
+        //任务
+        sendMessage(spu.getId(),"insert");
     }
-
+    @Transactional
     public void updateGoods(Spu spu) {
         //删除stock
         Sku sku=new Sku();
@@ -117,6 +125,33 @@ public class GoodsService {
             stock.setStock(sku1.getStock());
             this.stockMapper.insert(stock);
         });
+        //任务
+        sendMessage(spu.getId(),"update");
+    }
 
+    public Spu querySpuById(Long id) {
+        return this.spuMapper.selectByPrimaryKey(id);
+    }
+
+    private void sendMessage(Long id, String type){
+        // 发送消息
+        try {
+            this.amqpTemplate.convertAndSend("item." + type, id);
+        } catch (Exception e) {
+            logger.error("{}商品消息发送异常，商品id：{}", type, id, e);
+        }
+    }
+
+    public Sku querySkuById(Long id) {
+        return  this.skuMapper.selectByPrimaryKey(id);
+    }
+    @Transactional
+    public void reduceStock(List<CartDto> cartDtos) {
+        cartDtos.stream().forEach(e->{
+            Long count = this.skuMapper.updateStock(e.getSkuId(), e.getNum());
+            if(count<=0){
+                throw new RuntimeException("库存不够了");
+            }
+        });
     }
 }

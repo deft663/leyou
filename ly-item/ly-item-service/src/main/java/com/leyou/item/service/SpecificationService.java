@@ -59,4 +59,15 @@ public class SpecificationService {
     public void updateSpecnParams(SpecParam param) {
         this.specParamMapper.updateByPrimaryKey(param);
     }
+
+    public List<SpecGroup> querySpecsByCid(Long cid) {
+        // 查询规格组
+        List<SpecGroup> groups = this.queryByCategoryId(cid);
+        SpecParam param = new SpecParam();
+        groups.forEach(g -> {
+            // 查询组内参数
+            g.setParams(this.querySpecParamsByGroupId(g.getId(), null, null, null));
+        });
+        return groups;
+    }
 }
