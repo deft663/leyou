@@ -10,9 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.core.BoundHashOperations;
+import org.springframework.data.redis.core.ClusterOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.JedisCluster;
 
 import java.util.List;
 import java.util.Map;
@@ -66,14 +70,20 @@ public class CartService {
         }
         hashOps.put(cart.getSkuId().toString(),JsonUtils.serialize(cart));
     }
-
+    @Autowired
+    private JedisCluster jedisCluster;
     public List<Cart> getCart() {
+
         UserInfo user = LoginInterceptor.getLoginUser();
         String key=KEY_PREFIX+user.getId();
         BoundHashOperations<String, Object, Object> ops = this.redisTemplate.boundHashOps(key);
-        List<Cart> list = ops.entries().entrySet().stream().map(e -> {
+        Map<String, String> all = jedisCluster.hgetAll(key);
+        /*List<Cart> list = ops.entries().entrySet().stream().map(e -> {
             Cart cart = JsonUtils.parse(e.getValue().toString(), Cart.class);
             return cart;
+        }).collect(Collectors.toList());*/
+        List<Cart> list = all.values().stream().map(e -> {
+            return JsonUtils.parse(e, Cart.class);
         }).collect(Collectors.toList());
         return list;
     }

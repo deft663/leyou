@@ -3,9 +3,11 @@ package com.leyou.cart.controller;
 import com.leyou.cart.pojo.Cart;
 import com.leyou.cart.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.jedis.JedisClusterConnection;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import redis.clients.jedis.JedisCluster;
 
 import java.util.List;
 
@@ -25,7 +27,6 @@ public class CartController {
     }
     @GetMapping
     public ResponseEntity<List<Cart>> getCart(){
-
         return ResponseEntity.ok(cartService.getCart());
     }
 
