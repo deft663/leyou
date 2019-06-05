@@ -2,10 +2,14 @@ server:
   port: 8084
 spring:
   rabbitmq:
-    virtual-host: /leyou
-    username: /leyou
-    password: leyou
-    host: 192.168.25.129
+    #virtual-host: /leyou
+    #username: /leyou
+    #password: leyou
+    #host: 192.168.25.129
+    addresses: 192.168.25.129,192.168.25.130,192.168.25.131
+    listener:
+      simple:
+        acknowledge-mode: manual
   application:
     name: goods-page
   thymeleaf:

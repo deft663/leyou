@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.util.StringUtil;
 import com.leyou.common.pojo.PageResult;
+import com.leyou.common.util.IdWorker;
 import com.leyou.item.dto.CartDto;
 import com.leyou.item.mapper.*;
 import com.leyou.item.pojo.*;
@@ -11,6 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.ChannelCallback;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.support.CorrelationData;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +31,7 @@ import java.util.stream.Stream;
 @Service
 public class GoodsService {
     @Autowired
-    private AmqpTemplate amqpTemplate;
+    private RabbitTemplate rabbitTemplate;
     @Autowired
     private SpuMapper spuMapper;
     @Autowired
@@ -39,6 +45,8 @@ public class GoodsService {
     private Logger logger= LoggerFactory.getLogger(GoodsService.class);
     @Autowired
     private BrandMapper brandMapper;
+    //@Autowired
+    private IdWorker idWorker;
     public PageResult<SpuBo> getGoodsPage(String key, Boolean saleable, Integer page, Integer rows) {
         // 1、查询SPU
         // 分页,最多允许查100条
@@ -136,7 +144,11 @@ public class GoodsService {
     private void sendMessage(Long id, String type){
         // 发送消息
         try {
-            this.amqpTemplate.convertAndSend("item." + type, id);
+            //此处可以使用分布式id生成器   同时把id和消息体使用hash格式一块存入redis
+            CorrelationData data =new CorrelationData();
+            //data.setId(idWorker.nextId()+"");
+            data.setId("1");
+            this.rabbitTemplate.convertAndSend("item." + type, id,data);
         } catch (Exception e) {
             logger.error("{}商品消息发送异常，商品id：{}", type, id, e);
         }
